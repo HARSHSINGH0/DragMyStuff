@@ -77,7 +77,7 @@ const BoardApp = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 main">
       <div className="flex justify-between items-center mb-4 header">
         <img src="DragMyStuffLogo.png" alt="" className='header-logo'/>
         <div className='content'>
@@ -86,7 +86,7 @@ const BoardApp = () => {
               <img className='h-10' src="/icons/githublogo.svg" alt="" />
               <p>Github</p>
             </Button>
-            <Button onClick={() => window.location.href = 'https://buymeacoffee.com/confusedbond'}>
+            <Button onClick={() => window.location.href = 'https://buymeacoffee.com/confusedbond'} className='buymecoffee-button'>
               <img className='h-10' src="/icons/buymecoffee.svg" alt="" />
               <p>Buy Me a Coffee</p>
             </Button>
@@ -117,7 +117,7 @@ const BoardApp = () => {
             draggable
             onDragStart={(event) => handleDragStart(event, item)}
           >
-            <CardContent className="flex justify-between items-center">
+            <CardContent className="flex justify-between items-center" style={{ whiteSpace: 'pre-wrap' }}>
               <div className="flex items-center">
                 {item.type === 'image' && <Image className="mr-2" />}
                 {item.type === 'pdf' && <FileText className="mr-2" />}
