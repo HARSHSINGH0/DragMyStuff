@@ -82,7 +82,7 @@ const BoardApp = () => {
         <img src="DragMyStuffLogo.png" alt="" className='header-logo'/>
         <div className='content'>
           <div className='features'>
-            <Button onClick={() => window.location.href = 'https://github.com'}>
+            <Button onClick={() => window.location.href = 'https://github.com/HARSHSINGH0'}>
               <img className='h-10' src="/icons/githublogo.svg" alt="" />
               <p>Github</p>
             </Button>
@@ -97,7 +97,7 @@ const BoardApp = () => {
               <span>Clear All</span>
             </Button>
             <input type="file" accept=".json" onChange={importJSON} className="hidden" id="import-json" />
-            <Button onClick={() => document.getElementById('import-json').click()} className="mr-2">
+            <Button onClick={() => document.getElementById('import-json').click()} >
               <img className='h-10' src="/icons/import.svg" alt="" />
               <p>Import</p>
             </Button>
@@ -144,6 +144,11 @@ const BoardApp = () => {
           type="text"
           value={newItemText}
           onChange={(e) => setNewItemText(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              addItem();
+            }
+          }}
           placeholder="Add new item"
           className="mr-2 add-draggable-input"
         />
