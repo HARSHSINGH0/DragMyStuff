@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @import "https://unpkg.com/react-beautiful-dnd@latest/dist/react-beautiful-dnd.min.css";
 
 
@@ -29,5 +30,67 @@
     --destructive-foreground: 0 0% 100%;
     --accent: 48 100% 50%;
     --accent-foreground: 0 0% 100%;
+    --main-font-color: #504e4e;
+    --gray1: #d9d9d9;
+    --yellow1: #efe9ce;
+  }
+  #root{
+    display: flex;
+    justify-content: center;
+  }
+  body{
+    background-color: var(--yellow1);
+    color: var(--main-font-color);
+    font-family: "Afacad Flux", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings:
+      "slnt" 0;
+  }
+  .header{
+    .header-logo{
+      border-radius: 25px;
+    }
+    .features,.others{
+      img{
+        width: 50px;
+      }
+    }
+  }
+  .add-draggable-input{
+    height: inherit !important;
+  }
+  .add-draggable-submit{
+    border: 4px solid #c38e1e;
+  }
+  
+  @media screen and (max-width: 768px){
+    .header{
+      flex-direction: column;
+      .header-logo{
+        border-radius: 25px;
+      }
+      .content{
+        display: flex;
+        flex-direction: row;
+                
+        .features,.others{
+          display: flex;
+          flex-direction: row;
+          img{
+            width: 50px;
+            height: 50px;
+          }
+          .feature-button{
+            align-items: center !important;
+            display: flex !important;
+            flex-direction: column !important;
+          }
+        }
+          
+        
+      }
+    }
   }
 }

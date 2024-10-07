@@ -8,6 +8,7 @@ const BoardApp = () => {
   const [items, setItems] = useState([]);
   const [newItemText, setNewItemText] = useState('');
 
+  // Load items from local storage on component mount
   useEffect(() => {
     const storedItems = localStorage.getItem('boardItems');
     if (storedItems) {
@@ -15,26 +16,33 @@ const BoardApp = () => {
     }
   }, []);
 
+  // Save items to local storage whenever items change
   useEffect(() => {
     localStorage.setItem('boardItems', JSON.stringify(items));
   }, [items]);
 
+  // Add new item
   const addItem = () => {
     if (newItemText.trim() !== '') {
       const newItem = { id: Date.now().toString(), content: newItemText, type: 'text' };
-      setItems([...items, newItem]);
+      setItems((prevItems) => [...prevItems, newItem]);
       setNewItemText('');
     }
   };
 
+  // Delete item
   const deleteItem = (id) => {
-    setItems(items.filter((item) => item.id !== id));
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
+  // Edit item
   const editItem = (id, newContent) => {
-    setItems(items.map((item) => (item.id === id ? { ...item, content: newContent } : item)));
+    setItems((prevItems) =>
+      prevItems.map((item) => (item.id === id ? { ...item, content: newContent } : item))
+    );
   };
 
+  // Import JSON file
   const importJSON = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -49,6 +57,7 @@ const BoardApp = () => {
     reader.readAsText(file);
   };
 
+  // Export items to JSON file
   const exportJSON = () => {
     const dataStr = JSON.stringify(items, null, 2);
     const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
@@ -56,9 +65,12 @@ const BoardApp = () => {
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
+    document.body.appendChild(linkElement); // Append to the document
     linkElement.click();
+    document.body.removeChild(linkElement); // Clean up
   };
 
+  // Handle drag start event
   const handleDragStart = (event, item) => {
     event.dataTransfer.setData('text/plain', item.content);
     event.dataTransfer.effectAllowed = 'copyMove';
@@ -66,14 +78,34 @@ const BoardApp = () => {
 
   return (
     <div className="p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">LOGO</h1>
-        <div>
-          <input type="file" accept=".json" onChange={importJSON} className="hidden" id="import-json" />
-          <Button onClick={() => document.getElementById('import-json').click()} className="mr-2">
-            Import
-          </Button>
-          <Button onClick={exportJSON}>Export</Button>
+      <div className="flex justify-between items-center mb-4 header">
+        <img src="DragMyStuffLogo.png" alt="" className='header-logo'/>
+        <div className='content'>
+          <div className='features'>
+            <Button onClick={() => window.location.href = 'https://github.com'}>
+              <img className='h-10' src="/icons/githublogo.svg" alt="" />
+              <p>Github</p>
+            </Button>
+            <Button onClick={() => window.location.href = 'https://buymeacoffee.com/confusedbond'}>
+              <img className='h-10' src="/icons/buymecoffee.svg" alt="" />
+              <p>Buy Me a Coffee</p>
+            </Button>
+          </div>
+          <div className='others'>          
+            <Button onClick={() => setItems([])} >
+              <img src="/icons/clear.svg" alt="" />
+              <span>Clear All</span>
+            </Button>
+            <input type="file" accept=".json" onChange={importJSON} className="hidden" id="import-json" />
+            <Button onClick={() => document.getElementById('import-json').click()} className="mr-2">
+              <img className='h-10' src="/icons/import.svg" alt="" />
+              <p>Import</p>
+            </Button>
+            <Button onClick={exportJSON}>
+              <img className='h-10' src="/icons/export.svg" alt="" />
+              <p>Export</p>
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -113,9 +145,9 @@ const BoardApp = () => {
           value={newItemText}
           onChange={(e) => setNewItemText(e.target.value)}
           placeholder="Add new item"
-          className="mr-2"
+          className="mr-2 add-draggable-input"
         />
-        <Button onClick={addItem}>+ Add Draggable Text</Button>
+        <Button onClick={addItem} className='add-draggable-submit'>Add Draggable</Button>
       </div>
     </div>
   );
