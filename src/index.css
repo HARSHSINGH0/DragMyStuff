@@ -48,7 +48,7 @@
     font-variation-settings:
       "slnt" 0;
     .main{
-      max-width: 850px;
+      max-width: 840px;
       margin: 0px 20px;
     }
   }
@@ -58,7 +58,7 @@
     }
     .features,.others{
       img{
-        width: 50px;
+        width: 40px;
       }
     }
   }
@@ -88,13 +88,19 @@
     }
   }
   .card-box{
-    max-height: 150px;
+    max-height: 140px;
     overflow: auto;
   }
   .content{
     .features,.others{
       display: flex;
       align-items: flex-end;
+      .hide-mobile{
+        display: none ;
+      }
+      .hide-desktop{
+        display: block ;
+      }
       .feature-button{
         align-items: center;
         display: flex;
@@ -103,6 +109,9 @@
     }
   }
   @media screen and (max-width: 768px){
+    .main{
+      margin: 0px 10px;
+    }
     .header{
       flex-direction: column;
       .header-logo{
@@ -120,11 +129,14 @@
           display: flex;
           flex-direction: row;
           img{
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
           }
-          .buymecoffee-button{
-            display: none !important;
+          .hide-desktop{
+            display: none ;
+          }
+          .hide-mobile{
+            display: block ;
           }
           .feature-button{
             align-items: center !important;

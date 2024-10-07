@@ -86,15 +86,17 @@ const BoardApp = () => {
               <img className='h-10' src="/icons/githublogo.svg" alt="" />
               <p>Github</p>
             </Button>
-            <Button onClick={() => window.location.href = 'https://buymeacoffee.com/confusedbond'} className='buymecoffee-button'>
-              <img className='h-10' src="/icons/buymecoffee.svg" alt="" />
-              <p>Buy Me a Coffee</p>
+            <Button onClick={() => window.location.href = 'https://buymeacoffee.com/confusedbond'} >
+              <img className='h-10' src="/icons/buymecoffee.svg" alt="" />               
+                <p className='hide-desktop'> Buy me a Coffee</p>
+                <p className='hide-mobile'> Coffee</p>
             </Button>
           </div>
           <div className='others'>          
             <Button onClick={() => setItems([])} >
               <img src="/icons/clear.svg" alt="" />
-              <span>Clear All</span>
+              <span className='hide-desktop'>Clear All</span>
+              <span className='hide-mobile'>Clear</span>
             </Button>
             <input type="file" accept=".json" onChange={importJSON} className="hidden" id="import-json" />
             <Button onClick={() => document.getElementById('import-json').click()} >
