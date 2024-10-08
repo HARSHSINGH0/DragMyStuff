@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Edit, Trash2, Image, FileText } from 'lucide-react';
+import { X, Edit, Trash2, Image, FileText, Paperclip } from 'lucide-react';
 import { Button } from './button';
 import { Input } from './input';
 import { Card, CardContent } from './card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './dialog';
 
 const BoardApp = () => {
   const [items, setItems] = useState([]);
   const [newItemText, setNewItemText] = useState('');
   const [newItemFile, setNewItemFile] = useState(null);
   const fileInputRef = useRef(null);
+  const [isFilePickerOpen, setIsFilePickerOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     // Load stored items from local storage at component mount
@@ -107,6 +110,55 @@ const BoardApp = () => {
     }
   };
 
+  const FilePickerDialog = () => (
+    <Dialog open={isFilePickerOpen} onOpenChange={setIsFilePickerOpen}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Select a file</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-4">
+          {items.filter(item => item.type === 'image' || item.type === 'document').map(item => (
+            <Button
+              key={item.id}
+              onClick={() => {
+                setSelectedFile(item);
+                setIsFilePickerOpen(false);
+              }}
+              className="flex items-center justify-start"
+            >
+              {item.type === 'image' ? <Image className="mr-2" /> : <FileText className="mr-2" />}
+              {item.content}
+            </Button>
+          ))}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+
+  const FilePickerTrigger = () => (
+    <Button onClick={() => setIsFilePickerOpen(true)} className="fixed bottom-4 right-4 z-10">
+      <Paperclip className="mr-2" />
+      Attach File
+    </Button>
+  );
+
+  const useSelectedFile = () => {
+    if (selectedFile) {
+      // For same-origin pages
+      localStorage.setItem('selectedFile', JSON.stringify(selectedFile));
+
+      // For cross-origin pages or applications
+      const fileInfo = encodeURIComponent(JSON.stringify({
+        id: selectedFile.id,
+        name: selectedFile.content,
+        type: selectedFile.type
+      }));
+      window.open(`https://example.com/use-file?file=${fileInfo}`, '_blank');
+
+      setSelectedFile(null);
+    }
+  };
+
   return (
     <div className="p-4 main">
       <div className="flex justify-between items-center mb-4 header">
@@ -141,6 +193,18 @@ const BoardApp = () => {
           </div>
         </div>
       </div>
+
+      <FilePickerDialog />
+      <FilePickerTrigger />
+
+      {selectedFile && (
+        <div className="fixed bottom-16 right-4 bg-white p-2 rounded shadow">
+          Selected: {selectedFile.content}
+          <Button onClick={() => setSelectedFile(null)} className="ml-2">
+            <X size={16} />
+          </Button>
+        </div>
+      )}
 
       <div className="space-y-4">
         {items.map((item) => (
@@ -205,6 +269,10 @@ const BoardApp = () => {
         />
         <Button onClick={addItem} className='add-draggable-submit'>Add Draggable</Button>
       </div>
+
+      <Button onClick={useSelectedFile} disabled={!selectedFile}>
+        Use Selected File
+      </Button>
     </div>
   );
 };
