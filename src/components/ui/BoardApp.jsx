@@ -178,7 +178,7 @@ const BoardApp = () => {
           <div className='others'>          
             <Button onClick={() => setItems([])} >
               <img src="/icons/clear.svg" alt="" />
-              <span className='hide-desktop'>Clear All</span>
+              <span className='hide-desktop'>Clear</span>
               <span className='hide-mobile'>Clear</span>
             </Button>
             <input type="file" accept=".json" onChange={importJSON} className="hidden" id="import-json" />
@@ -258,7 +258,7 @@ const BoardApp = () => {
             }
           }}
           placeholder="Add new item"
-          className="mr-2 add-draggable-input"
+          className="mr-2 add-draggable-input type"
         />
         <Input
           type="file"
@@ -267,7 +267,7 @@ const BoardApp = () => {
           className="mr-2 add-draggable-input"
           ref={fileInputRef}
         />
-        <Button onClick={addItem} className='add-draggable-submit'>Add Draggable</Button>
+        <Button onClick={addItem} className='add-draggable-submit'>Add</Button>
       </div>
 
       <Button onClick={useSelectedFile} disabled={!selectedFile}>
