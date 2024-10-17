@@ -192,7 +192,9 @@ const BoardApp = () => {
             </Button>
           </div>
         </div>
+        
       </div>
+      <div className='hide-desktop mb-4'>Your Personalized Draggable Clipboard</div>
 
       <FilePickerDialog />
       <FilePickerTrigger />
