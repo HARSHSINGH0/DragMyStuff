@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "DragMyStuff Sidepanel",
+  "name": "DragMyStuff",
   "version": "1.0",
   "description": "A sidepanel extension for managing draggable items",
   "permissions": ["storage", "activeTab", "sidePanel"],
