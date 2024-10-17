@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Edit, Trash2, Image, FileText, Paperclip } from 'lucide-react';
+import { X, Edit, Trash2, Image, FileText, Paperclip, Folder } from 'lucide-react';
 import { Button } from './button';
 import { Input } from './input';
 import { Card, CardContent } from './card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './dialog';
+import toast, { Toaster } from 'react-hot-toast';
 
 const BoardApp = () => {
   const [items, setItems] = useState([]);
@@ -159,8 +160,35 @@ const BoardApp = () => {
     }
   };
 
+  const copyToClipboard = (content) => {
+    navigator.clipboard.writeText(content).then(() => {
+      toast.success('Content copied to clipboard', {
+        duration: 2000,
+        position: 'bottom-center',
+      });
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+      toast.error('Failed to copy content');
+    });
+  };
+
+  const handleItemClick = (item) => {
+    if (item.type === 'image' || item.type === 'document') {
+      // Open file location
+      if (item.filePath) {
+        window.open(item.filePath, '_blank');
+      } else {
+        toast.error('File not found');
+      }
+    } else {
+      // For text items, copy to clipboard as before
+      copyToClipboard(item.content);
+    }
+  };
+
   return (
     <div className="p-4 main">
+      <Toaster />
       <div className="flex justify-between items-center mb-4 header">
         <img src="DragMyStuffLogo.png" alt="" className='header-logo'/>
         <div className='content'>
@@ -212,17 +240,18 @@ const BoardApp = () => {
         {items.map((item) => (
           <Card
             key={item.id}
-            className="p-4"
+            className="p-4 cursor-pointer"
             draggable
             onDragStart={(event) => handleDragStart(event, item)}
+            onClick={() => handleItemClick(item)}
           >
             <CardContent className="flex justify-between items-center" style={{ whiteSpace: 'pre-wrap' }}>
               <div className="flex items-center">
                 {item.type === 'image' && <Image className="mr-2" />}
                 {item.type === 'document' && <FileText className="mr-2" />}
                 {item.type === 'image' || item.type === 'document' ? (
-                  <span onClick={() => {
-                    // Mock approach for directly handling files, real-world usage on desktop apps
+                  <span onClick={(e) => {
+                    e.stopPropagation();
                     const input = document.createElement('input');
                     input.type = 'file';
                     input.accept = item.type === 'image' ? 'image/*' : 'application/pdf';
@@ -234,13 +263,17 @@ const BoardApp = () => {
                 )}
               </div>
               <div>
-                <Button onClick={() => {
+                <Button onClick={(e) => {
+                  e.stopPropagation();
                   const newContent = prompt('Edit item:', item.content);
                   if (newContent !== null) editItem(item.id, newContent);
                 }} className="mr-2">
                   <Edit size={16} />
                 </Button>
-                <Button onClick={() => deleteItem(item.id)} variant="destructive">
+                <Button onClick={(e) => {
+                  e.stopPropagation();
+                  deleteItem(item.id);
+                }} variant="destructive">
                   <Trash2 size={16} />
                 </Button>
               </div>
